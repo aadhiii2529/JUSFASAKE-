@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seismic Perimeter Guard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body>
+    <div id="alert-container"></div>
+    <div class="container">
+        <header>
+            <h1>🛡️ Perimeter Guard PRO</h1>
+            <div id="connection-status" class="status-badge disconnected">System Offline</div>
+        </header>
+
+        <main>
+            <!-- Hero Section: Video Feed -->
+            <section class="card highlight">
+                <div class="toolbar">
+                    <button class="btn secondary active" id="tool-point">📍 Point</button>
+                    <button class="btn secondary" id="tool-rect">🟦 Rect</button>
+                    <button class="btn secondary" id="tool-poly">⬢ Poly</button>
+                    <button id="clear-zones-btn" class="btn danger" style="margin-left: auto;">🧨 Clear</button>
+                </div>
+                <div class="canvas-container">
+                    <img src="{{ url_for('video_feed') }}" id="video-bg" alt="CCTV Feed">
+                    <canvas id="zone-canvas" width="600" height="300"></canvas>
+                </div>
+                <div class="status-panel" style="margin-top: 2rem;">
+                    <div class="metric">
+                        <span class="label">Uptime</span>
+                        <span id="live-time" class="value">00:00:00</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Intrusions</span>
+                        <span id="intrusion-count" class="value">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">System Status</span>
+                        <span id="system-state" class="value">Active</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Last Logic</span>
+                        <span id="last-event" class="value">Scanning</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Deployment Card -->
+            <section class="card">
+                <h2>🌍 Deployment</h2>
+                <div class="metric" style="margin-bottom: 1rem;">
+                    <span class="label">Site Name</span>
+                    <span id="location-name" class="value">---</span>
+                </div>
+                <div id="location-map" class="location-map-preview" style="height: 120px; margin-bottom: 1rem;"></div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button id="test-trigger-btn" class="btn primary" style="flex: 1;">⚡ Test</button>
+                    <button id="silence-alarm-btn" class="btn danger" style="flex: 1; display: none;">🔕
+                        Silence</button>
+                </div>
+            </section>
+
+            <!-- Config Card -->
+            <section class="card">
+                <h2>🎥 Configuration</h2>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label class="label" style="font-size: 0.75rem; color: var(--text-secondary);">Camera Source</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="text" id="camera-url-input" class="form-input" style="flex: 1;"
+                            placeholder="RTSP/Local">
+                        <button id="update-camera-btn" class="btn primary">Apply</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="label" style="font-size: 0.75rem; color: var(--text-secondary);">Sensitivity: <span
+                            id="sensitivity-val" style="color: var(--accent)">50</span></label>
+                    <input type="range" id="sensitivity-slider" min="0" max="100" value="50">
+                </div>
+            </section>
+
+            <!-- Tools/Settings -->
+            <section class="card">
+                <h2>⚙️ Deployment Settings</h2>
+                <details class="location-edit-panel">
+                    <summary class="btn secondary" style="width: 100%;">Update Site Info</summary>
+                    <div class="location-form" style="margin-top: 1rem;">
+                        <input type="text" id="loc-name-input" class="form-input" placeholder="Site Name">
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="number" id="loc-lat-input" class="form-input" placeholder="Lat"
+                                style="flex: 1;">
+                            <input type="number" id="loc-lng-input" class="form-input" placeholder="Lng"
+                                style="flex: 1;">
+                        </div>
+                        <button id="update-location-btn" class="btn primary" style="width: 100%;">Save</button>
+                    </div>
+                </details>
+                <a id="open-map-link" href="#" target="_blank" class="btn secondary"
+                    style="width: 100%; margin-top: 0.5rem; display: block; text-align: center; text-decoration: none;">🛰️
+                    View Satellite</a>
+            </section>
+
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
